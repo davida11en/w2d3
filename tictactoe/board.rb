@@ -39,18 +39,54 @@ class Board
     end
 
     def win_row?(mark) 
-        @grid.each do |rows|
-            rows.each do |el|
-                
+        @grid.each do |row|
+            if row.all?(mark)
+                return true
             end
         end
+        false
     end
     
     def win_col?(mark)
-
+        (0...@grid.length - 1).each do |i|
+            col = @grid.map{ |e| e[i] }
+            if col.all?(mark)
+                return true
+            end
+        end
+        false
     end
 
-    def win_diagnol?(mark)
+    def win_diagonal?(mark)
+        f = 0
+        b = @grid.length - 1
+        fmarks = []
+        bmarks = []
 
+        while f < @grid.length
+            fmarks << @grid[f][f]
+            bmarks << @grid[f][b]
+            b -= 1
+            f += 1
+        end
+
+        if fmarks.all?(mark) || bmarks.all?(mark)
+            return true
+        else 
+            return false
+        end
+    end
+
+    def win?(mark)
+        win_col?(mark) || win_row?(mark) || win_diagonal?(mark)
+    end
+
+    def empty_positions?
+        @grid.each do |subs|
+            if subs.any?('_')
+                return true
+            end
+        end
+        false
     end
 end
